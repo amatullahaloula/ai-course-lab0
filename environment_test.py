@@ -10,15 +10,17 @@ import os
 
 def verify_environment():
     """Verify Python environment and package installations."""
-    
+    file = open('environment_report.txt', 'w')
+    file.write("LAB 0: ENVIRONMENT VERIFICATION REPORT\n")
+    file.write("=" * 50 + "\n")
     results = []
     
     # Check Python version
     python_version = sys.version.split()[0]
-    results.append(f"✅ Python Version: {python_version}")
+    results.append(f" Python Version: {python_version}")
     
     # Check operating system
-    results.append(f"✅ OS: {platform.system()} {platform.release()}")
+    results.append(f" OS: {platform.system()} {platform.release()}")
     
     # Required packages with versions
     required_packages = {
@@ -32,7 +34,7 @@ def verify_environment():
         try:
             module = __import__(package_name)
             version = getattr(module, '__version__', 'unknown')
-            results.append(f"✅ {display_name}: {version}")
+            results.append(f" {display_name}: {version}")
         except ImportError:
             results.append(f"❌ {display_name}: NOT INSTALLED")
     
@@ -44,13 +46,17 @@ def verify_environment():
     in_conda = 'CONDA_PREFIX' in os.environ
     
     if in_venv:
-        results.append(f"✅ Virtual Environment: Active ({sys.prefix})")
+        results.append(f" Virtual Environment: Active ({sys.prefix})")
     elif in_conda:
-        results.append(f"✅ Conda Environment: Active ({os.environ['CONDA_PREFIX']})")
+        results.append(f" Conda Environment: Active ({os.environ['CONDA_PREFIX']})")
     else:
-        results.append("⚠️  Virtual Environment: Not active")
+        results.append("  Virtual Environment: Not active")
     
+    file.write("\n".join(results) + "\n")
+    file.write("=" * 50 + "\n")
+    file.close()
     return "\n".join(results)
+
 
 if __name__ == "__main__":
     print("=" * 50)
